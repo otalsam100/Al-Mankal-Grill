@@ -1,4 +1,10 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Almankal Grill: Palestinian and Middle Eastern charcoal barbecue, Zabiha halal, 10021 S Texas 6, Sugar Land TX.">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Almankal Grill</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -155,6 +161,9 @@ section { padding-block: 64px; }
 .items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; }
 @media (max-width: 820px) { .items { grid-template-columns: minmax(0, 1fr); } }
 .item { padding: 14px 0 12px; border-bottom: 1px solid var(--line); min-width: 0; }
+.item .body { min-width: 0; }
+.item.has-img { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; align-items: center; }
+.item .thumb { width: 96px; height: 96px; object-fit: cover; border-radius: 4px; background: var(--surface-2); }
 .item .row { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
 .item .name { font-weight: 700; font-size: 17px; }
 .item .lead { flex: 1; border-bottom: 2px dotted var(--line); transform: translateY(-4px); min-width: 16px; }
@@ -197,6 +206,8 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
 }
 </style>
 
+</head>
+<body>
 <header class="nav">
   <div class="wrap">
     <a class="brand" href="#top">Al<b>mankal</b> Grill</a>
@@ -371,6 +382,7 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
   var chips = document.getElementById("chips");
   var out = document.getElementById("menu-out");
 
+  function slug(t) { return t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
   function money(n) { return "$" + n.toFixed(2); }
   function el(tag, cls, text) {
     var e = document.createElement(tag);
@@ -406,14 +418,23 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
       var grid = el("div", "items");
       items.forEach(function (it) {
         var row = el("div", "item");
+        var img = el("img", "thumb");
+        img.alt = it[0]; img.loading = "lazy"; img.hidden = true;
+        var exts = ["jpg", "webp", "png"], xi = 0, base = "images/" + cat.id + "-" + slug(it[0]);
+        img.addEventListener("load", function () { img.hidden = false; row.className += " has-img"; });
+        img.addEventListener("error", function () { xi++; if (xi < exts.length) img.src = base + "." + exts[xi]; });
+        img.src = base + "." + exts[0];
+        var body = el("div", "body");
         var line = el("div", "row");
         var nm = el("span", "name", it[0]);
         if (it[3]) nm.appendChild(el("span", "pop", "Popular"));
         line.appendChild(nm);
         line.appendChild(el("span", "lead"));
         line.appendChild(el("span", "price", money(it[1])));
-        row.appendChild(line);
-        if (it[2]) row.appendChild(el("div", "desc", it[2]));
+        body.appendChild(line);
+        if (it[2]) body.appendChild(el("div", "desc", it[2]));
+        row.appendChild(img);
+        row.appendChild(body);
         grid.appendChild(row);
         shown++;
       });
@@ -451,6 +472,7 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
     { id: "base-1", name: "Google reviewer", rating: 5, text: "Wallah they got the best food I always go there.", sub: "Food 5 · Service 5 · Atmosphere 5", ts: 0 }
   ];
   var live = {};            // id -> review from the shared store
+  var filed = [];           // reviews loaded from reviews.json (the weekly-update file)
   var seen = {};            // ids already rendered, so only truly new ones animate
   var firstPaint = true;
   var canManage = false, dbRef = null;
@@ -487,8 +509,9 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
   }
 
   function renderReviews() {
-    var all = BASE.concat(Object.keys(live).map(function (k) { return live[k]; }))
+    var all = BASE.concat(filed, Object.keys(live).map(function (k) { return live[k]; }))
       .filter(function (r) { return Number(r.rating) >= 4 && r.text; })
+      .filter(function (r, i, arr) { return arr.findIndex(function (o) { return o.name === r.name && o.text === r.text; }) === i; })
       .sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
     area.textContent = "";
     countEl.textContent = all.length + (all.length === 1 ? " review" : " reviews") + " shown here";
@@ -504,6 +527,18 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
     firstPaint = false;
   }
   renderReviews();
+
+  // reviews.json: edit this one file on GitHub each week to add new reviews. No code changes needed.
+  try {
+    fetch("reviews.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : []; }).then(function (list) {
+      if (!Array.isArray(list)) return;
+      filed = list.map(function (v, i) {
+        var t = v.date ? Date.parse(v.date) : 0;
+        return { id: "file-" + i, name: String(v.name || "Google reviewer"), rating: Number(v.rating), text: String(v.text || ""), sub: v.sub ? String(v.sub) : "", ts: isNaN(t) ? 0 : t };
+      });
+      renderReviews();
+    }).catch(function () {});
+  } catch (e) {}
 
   // Shared live store: signed-in viewers get new reviews the moment they are published.
   (async function () {
@@ -586,5 +621,5 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
   });
 })();
 </script>
-
-</body></html>
+</body>
+</html>
