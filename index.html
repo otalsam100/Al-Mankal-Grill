@@ -241,9 +241,9 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
     <div class="wrap">
       <div class="sec-head">
         <div>
-          <span class="live-tag"><span class="dot"></span>Live reviews</span>
+          <span class="live-tag"><span class="dot"></span>Guest reviews</span>
           <h2>What guests say</h2>
-          <p>Newest first. Only 4 and 5 star reviews are shown.</p>
+          <p>A few words from guests who have visited.</p>
         </div>
         <div class="score"><big>4.8</big><span>average rating on Google</span></div>
       </div>
@@ -468,9 +468,7 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
 
   /* ---------- Reviews ---------- */
   // Real review text that has been confirmed. New ones arrive live from the shared store below.
-  var BASE = [
-    { id: "base-1", name: "Google reviewer", rating: 5, text: "Wallah they got the best food I always go there.", sub: "Food 5 · Service 5 · Atmosphere 5", ts: 0 }
-  ];
+  var BASE = []; // Reviews are loaded from reviews.json.
   var live = {};            // id -> review from the shared store
   var filed = [];           // reviews loaded from reviews.json (the weekly-update file)
   var seen = {};            // ids already rendered, so only truly new ones animate
