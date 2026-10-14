@@ -1,0 +1,590 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Almankal Grill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Kufi+Arabic:wght@600&display=swap">
+<style>
+/* Layout concept: a food-truck order window. Giant stencil-style headline over drifting embers,
+   a live review ticker, and a menu set as kitchen tickets with dot leaders and mono prices. */
+:root {
+  --bg: #181613;
+  --surface: #221f1b;
+  --surface-2: #2b2723;
+  --line: #3b362f;
+  --fg: #f3ede3;
+  --muted: #a9a094;
+  --ember: #ff8a1f;
+  --gold: #efc25a;
+  --on-ember: #1a1208;
+  --good: #7fd18b;
+  --font-display: "Anton", "Impact", "Arial Narrow", sans-serif;
+  --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-ar: "Noto Kufi Arabic", "Segoe UI", Tahoma, sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f4f2ee; --surface: #ffffff; --surface-2: #ece8e1; --line: #d9d3c8;
+    --fg: #211d18; --muted: #675f54; --ember: #c4570a; --gold: #8f6400;
+    --on-ember: #ffffff; --good: #1f7a33; color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f4f2ee; --surface: #ffffff; --surface-2: #ece8e1; --line: #d9d3c8;
+  --fg: #211d18; --muted: #675f54; --ember: #c4570a; --gold: #8f6400;
+  --on-ember: #ffffff; --good: #1f7a33; color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+  padding-inline: 16px; padding-block: 0;
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 1120px; margin-inline: auto; min-width: 0; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+/* nav */
+.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  margin-inline: -16px; padding: 12px 16px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+}
+.nav .wrap { display: flex; align-items: center; gap: 20px; }
+.brand { font-family: var(--font-display); font-size: 22px; letter-spacing: .04em; text-decoration: none; text-transform: uppercase; margin-right: auto; white-space: nowrap; }
+.brand b { color: var(--ember); font-weight: 400; }
+.nav a.link { text-decoration: none; font-size: 14px; font-weight: 600; color: var(--muted); }
+.nav a.link:hover { color: var(--fg); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--ember); color: var(--on-ember); font-weight: 700; font-size: 15px;
+  padding: 11px 20px; border-radius: 4px; text-decoration: none; border: 0; cursor: pointer;
+  font-family: var(--font-body);
+}
+.btn:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; color: var(--fg); border: 1.5px solid var(--line); }
+.btn.ghost:hover { border-color: var(--ember); filter: none; }
+.btn.sm { padding: 8px 14px; font-size: 14px; }
+@media (max-width: 640px) { .nav a.link { display: none; } }
+
+/* hero */
+.hero { position: relative; padding-block: 64px 48px; overflow: hidden; margin-inline: -16px; padding-inline: 16px; }
+.hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hero .wrap { position: relative; }
+.hero-ar { font-family: var(--font-ar); font-size: clamp(22px, 4vw, 34px); color: var(--gold); margin: 0 0 6px; line-height: 1.3; }
+.hero h1 {
+  font-family: var(--font-display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(60px, 15vw, 168px); line-height: .92; letter-spacing: .01em;
+}
+.hero h1 span { color: var(--ember); display: block; }
+.hero p.lede { max-width: 52ch; font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); margin: 22px 0 28px; }
+.hero p.lede strong { color: var(--fg); font-weight: 600; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0; margin-top: 44px; border-block: 1px solid var(--line); }
+.fact { padding: 16px 18px 16px 0; min-width: 0; }
+.fact + .fact { padding-left: 18px; border-left: 1px solid var(--line); }
+@media (max-width: 700px) { .fact + .fact { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); } .fact { padding-right: 0; } }
+.fact .k { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.fact .v { font-size: 18px; font-weight: 600; margin-top: 2px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); flex: none; }
+.dot.on { background: var(--good); box-shadow: 0 0 0 0 var(--good); animation: ping 2s infinite; }
+@keyframes ping { 70% { box-shadow: 0 0 0 9px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+/* sections */
+section { padding-block: 64px; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px 32px; margin-bottom: 28px; }
+.sec-head h2 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: clamp(36px, 6vw, 60px); line-height: 1; letter-spacing: .01em; }
+.sec-head p { margin: 8px 0 0; color: var(--muted); max-width: 52ch; }
+
+/* reviews */
+.live-tag { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ember); font-weight: 600; }
+.live-tag .dot { background: var(--ember); animation: pulse 1.6s infinite; }
+@keyframes pulse { 50% { opacity: .25; } }
+.score { display: flex; align-items: baseline; gap: 10px; }
+.score big { font-family: var(--font-display); font-size: 56px; line-height: 1; color: var(--gold); }
+.score span { color: var(--muted); font-size: 14px; max-width: 20ch; line-height: 1.3; }
+.ticker { overflow: hidden; margin-inline: -16px; padding-inline: 16px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
+.track { display: flex; gap: 16px; width: max-content; animation: slide var(--dur, 40s) linear infinite; }
+.ticker:hover .track { animation-play-state: paused; }
+@keyframes slide { to { transform: translateX(calc(-50% - 8px)); } }
+.static-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+.review {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 20px;
+  display: flex; flex-direction: column; gap: 12px; min-width: 0;
+}
+.track .review { width: 330px; flex: none; }
+.review.fresh { animation: arrive .9s cubic-bezier(.2,.8,.2,1); border-color: var(--ember); }
+@keyframes arrive { from { opacity: 0; transform: translateY(-18px) scale(.97); } to { opacity: 1; transform: none; } }
+.stars { color: var(--gold); letter-spacing: 2px; font-size: 17px; line-height: 1; }
+.stars i { font-style: normal; color: var(--line); }
+.review q { quotes: none; font-size: 17px; line-height: 1.45; }
+.review .meta { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-top: auto; font-size: 13px; color: var(--muted); }
+.review .meta b { color: var(--fg); font-weight: 600; }
+.badge-new { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; background: var(--ember); color: var(--on-ember); padding: 2px 7px; border-radius: 3px; font-weight: 600; }
+.sub { font-family: var(--font-mono); font-size: 12px; }
+.review-foot { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin-top: 22px; color: var(--muted); font-size: 14px; }
+.review-foot a { color: var(--fg); font-weight: 600; }
+.x-btn { background: none; border: 0; color: var(--muted); font: inherit; font-size: 12px; text-decoration: underline; cursor: pointer; padding: 0; }
+.add-form { margin-top: 28px; padding: 20px; border: 1px dashed var(--line); border-radius: 6px; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+.add-form h3 { grid-column: 1 / -1; font-size: 15px; }
+.add-form .full { grid-column: 1 / -1; }
+.add-form label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); min-width: 0; }
+.add-form input, .add-form select, .add-form textarea {
+  font: inherit; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 10px; width: 100%; min-width: 0;
+}
+.add-form .note { grid-column: 1 / -1; font-size: 13px; color: var(--muted); margin: 0; }
+
+/* menu */
+.controls { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin-bottom: 22px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: inherit; font-size: 14px; font-weight: 600; color: var(--muted); background: transparent; border: 1.5px solid var(--line); border-radius: 999px; padding: 7px 16px; cursor: pointer; }
+.chip:hover { color: var(--fg); border-color: var(--muted); }
+.chip[aria-pressed="true"] { background: var(--ember); border-color: var(--ember); color: var(--on-ember); }
+.search { flex: 1 1 200px; min-width: 0; max-width: 320px; margin-left: auto; font: inherit; font-size: 14px; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px; }
+.cat { margin-bottom: 36px; }
+.cat h3 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: 26px; letter-spacing: .04em; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; padding-bottom: 10px; border-bottom: 2px solid var(--fg); margin-bottom: 4px; }
+.cat h3 small { font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; color: var(--muted); text-transform: none; }
+.items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; }
+@media (max-width: 820px) { .items { grid-template-columns: minmax(0, 1fr); } }
+.item { padding: 14px 0 12px; border-bottom: 1px solid var(--line); min-width: 0; }
+.item .row { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.item .name { font-weight: 700; font-size: 17px; }
+.item .lead { flex: 1; border-bottom: 2px dotted var(--line); transform: translateY(-4px); min-width: 16px; }
+.item .price { font-family: var(--font-mono); font-weight: 600; font-size: 16px; font-variant-numeric: tabular-nums; }
+.item .desc { color: var(--muted); font-size: 14px; margin-top: 2px; }
+.pop { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ember); border: 1px solid var(--ember); border-radius: 3px; padding: 1px 6px; margin-left: 8px; vertical-align: 2px; white-space: nowrap; }
+.empty { color: var(--muted); padding: 24px 0; }
+.fine { color: var(--muted); font-size: 13px; margin-top: 8px; }
+
+/* why */
+.why { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 0; border-top: 1px solid var(--line); }
+.why > div { padding: 24px 24px 24px 0; min-width: 0; }
+.why > div + div { padding-left: 24px; border-left: 1px solid var(--line); }
+@media (max-width: 860px) { .why > div + div { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); } .why > div { padding-right: 0; } }
+.why h3 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: 24px; letter-spacing: .04em; color: var(--ember); margin-bottom: 8px; }
+.why p { margin: 0; color: var(--muted); }
+
+/* visit */
+.visit { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 24px; min-width: 0; }
+.card h3 { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: 24px; letter-spacing: .04em; margin-bottom: 14px; }
+.addr { font-size: 20px; font-weight: 600; line-height: 1.35; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; margin: 0; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.stack { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.copy-ok { font-size: 13px; color: var(--good); align-self: center; }
+.order-card { background: var(--ember); color: var(--on-ember); border-color: var(--ember); }
+.order-card h3 { color: var(--on-ember); }
+.order-card p { margin: 0 0 18px; max-width: 40ch; }
+.order-card .btn { background: var(--on-ember); color: var(--ember); }
+
+footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var(--muted); font-size: 14px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .track { animation: none; }
+  .ticker { overflow-x: auto; }
+  .dot.on, .live-tag .dot, .review.fresh { animation: none; }
+}
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Al<b>mankal</b> Grill</a>
+    <a class="link" href="#reviews">Reviews</a>
+    <a class="link" href="#menu">Menu</a>
+    <a class="link" href="#visit">Visit</a>
+    <a class="btn sm" href="https://order.online/store/almankal-grill-s-texas-6-24506758" target="_blank" rel="noopener">Order online</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <canvas id="embers" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <p class="hero-ar" lang="ar" dir="rtl">المنقل</p>
+      <h1>Almankal<span>Grill</span></h1>
+      <p class="lede">Palestinian and Middle Eastern barbecue cooked over charcoal on <strong>S Texas 6 in Sugar Land</strong>. Shawarma, skewers, mixed grill and family platters, all <strong>Zabiha halal</strong>.</p>
+      <div class="cta-row">
+        <a class="btn" href="https://order.online/store/almankal-grill-s-texas-6-24506758" target="_blank" rel="noopener">Order pickup or delivery</a>
+        <a class="btn ghost" href="#menu">See the menu</a>
+      </div>
+      <div class="facts">
+        <div class="fact"><div class="k">Right now</div><div class="v"><span class="dot" id="open-dot"></span><span id="open-text">Checking hours</span></div></div>
+        <div class="fact"><div class="k">On Google</div><div class="v">About 4.8 <span class="stars" aria-hidden="true">★★★★★</span></div></div>
+        <div class="fact"><div class="k">Good to know</div><div class="v">Zabiha halal &middot; Prayer space</div></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="reviews">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="live-tag"><span class="dot"></span>Live reviews</span>
+          <h2>What guests say</h2>
+          <p>Newest first. Only 4 and 5 star reviews are shown.</p>
+        </div>
+        <div class="score"><big>4.8</big><span>average rating on Google</span></div>
+      </div>
+      <div id="review-area"></div>
+      <div class="review-foot">
+        <a href="https://www.google.com/search?q=ALMankal+Grill+(Food+Truck)+Reviews" target="_blank" rel="noopener">Read every review on Google</a>
+        <a href="https://m.yelp.com/biz/al-mankal-grill-sugar-land" target="_blank" rel="noopener">Read reviews on Yelp</a>
+        <span id="review-count"></span>
+      </div>
+      <form class="add-form" id="add-form" hidden>
+        <h3>Add a new review to the live feed</h3>
+        <label>Reviewer name<input id="rv-name" type="text" maxlength="60" placeholder="Name as shown on Google"></label>
+        <label>Stars<select id="rv-rating"><option value="5">5 stars</option><option value="4">4 stars</option></select></label>
+        <label class="full">Review text<textarea id="rv-text" rows="3" maxlength="500" placeholder="Paste the review exactly as the guest wrote it"></textarea></label>
+        <p class="note">Reviews under 4 stars are never shown. Everyone who is signed in and has this page open sees a new review appear right away.</p>
+        <div class="full"><button class="btn sm" type="submit">Publish review</button> <span class="fine" id="rv-msg" role="status"></span></div>
+      </form>
+    </div>
+  </section>
+
+  <section id="menu" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2>The menu</h2>
+          <p>Every item is cooked to order over charcoal. Tap a category to filter, or search by name.</p>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="chips" id="chips" role="group" aria-label="Menu categories"></div>
+        <input class="search" id="q" type="search" placeholder="Search the menu" aria-label="Search the menu">
+      </div>
+      <div id="menu-out"></div>
+      <p class="fine">Prices match the online ordering menu and can change. Ask at the window about anything you cannot eat.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap why">
+      <div><h3>Real charcoal</h3><p>Skewers, kebab and whole fish cook over live coals, the way a mangal is meant to be used.</p></div>
+      <div><h3>Zabiha halal</h3><p>All meat is verified Zabiha halal, so you can order anything on the menu without asking.</p></div>
+      <div><h3>Room for everyone</h3><p>A prayer space on site, outdoor seating, wheelchair access, takeaway and delivery.</p></div>
+    </div>
+  </section>
+
+  <section id="visit" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2>Find the truck</h2></div>
+      <div class="visit">
+        <div class="card">
+          <h3>Address</h3>
+          <p class="addr" id="addr">10021 S Texas 6<br>Sugar Land, TX 77498</p>
+          <div class="stack">
+            <a class="btn sm" href="https://www.google.com/maps/search/?api=1&query=10021+S+Texas+6+Sugar+Land+TX+77498" target="_blank" rel="noopener">Get directions</a>
+            <button class="btn sm ghost" type="button" id="copy-addr">Copy address</button>
+            <span class="copy-ok" id="copy-ok" hidden>Copied</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Hours and phone</h3>
+          <dl class="kv">
+            <dt>Every day</dt><dd>12:00 PM to 9:35 PM</dd>
+            <dt>Phone</dt><dd><a href="tel:+18327388998">(832) 738-8998</a></dd>
+          </dl>
+          <p class="fine">Hours are the online ordering hours. Call before a big group order.</p>
+        </div>
+        <div class="card order-card">
+          <h3>Skip the line</h3>
+          <p>Order pickup or delivery from your phone and we will have it hot at the window.</p>
+          <a class="btn" href="https://order.online/store/almankal-grill-s-texas-6-24506758" target="_blank" rel="noopener">Order online</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>Almankal Grill &middot; 10021 S Texas 6, Sugar Land, TX 77498</span>
+  <span>Palestinian and Middle Eastern charcoal barbecue</span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Menu data (from the online ordering menu) ---------- */
+  var FRIES = "Served with fries";
+  var MENU = [
+    { id: "meals", label: "Meals", items: [
+      ["Chicken Shawarma Arabi", 16.87, FRIES],
+      ["Italian Chicken", 19.68, FRIES],
+      ["Chicken Quesadillas", 16.87, FRIES],
+      ["Fried Chicken Zinger Arabi", 16.87, FRIES],
+      ["Almankal Grill Family Platter", 63.81, "Made for sharing", 1],
+      ["Mixed Grill", 25.31, "An assortment of seasoned meats and skewers", 1],
+      ["Kebab", 21.09],
+      ["Chicken", 21.09],
+      ["Lamb and Beef Chunks", 35.60],
+      ["Grilled Whole Fish", 35.16],
+      ["Falafel", 14.05]
+    ]},
+    { id: "burgers", label: "Burgers", note: "Both served with fries", items: [
+      ["Grilled Beef Burger", 14.05],
+      ["Fried Chicken Burger", 14.05, "", 1]
+    ]},
+    { id: "wraps", label: "Wraps", items: [
+      ["Chicken Shawarma", 11.24, "", 1],
+      ["Fried Chicken Zinger", 11.24],
+      ["Falafel", 8.42],
+      ["Kebab", 9.83],
+      ["Chicken Chunks", 9.83],
+      ["Beef Chunks", 11.24],
+      ["Lamb Chunks", 11.24]
+    ]},
+    { id: "skewers", label: "Skewers", items: [
+      ["Kebab", 8.42],
+      ["Chicken", 8.42],
+      ["Beef", 9.83, "Lean or with fat"],
+      ["Lamb", 9.83, "Lean or with fat"],
+      ["Lamb Fat", 5.61]
+    ]},
+    { id: "sides", label: "Sides", items: [
+      ["Grape Leaves", 5.61],
+      ["Hummus", 8.42],
+      ["French Fries", 5.61],
+      ["Salad", 7.00, "Grilled or fresh"]
+    ]},
+    { id: "drinks", label: "Drinks", items: [
+      ["Water", 1.39],
+      ["Soft Drink", 2.09],
+      ["Yogurt", 4.20]
+    ]}
+  ];
+
+  var activeCat = "all", query = "";
+  var chips = document.getElementById("chips");
+  var out = document.getElementById("menu-out");
+
+  function money(n) { return "$" + n.toFixed(2); }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function renderChips() {
+    chips.textContent = "";
+    [{ id: "all", label: "All" }].concat(MENU).forEach(function (c) {
+      var b = el("button", "chip", c.label);
+      b.type = "button";
+      b.setAttribute("aria-pressed", String(c.id === activeCat));
+      b.addEventListener("click", function () { activeCat = c.id; renderChips(); renderMenu(); });
+      chips.appendChild(b);
+    });
+  }
+
+  function renderMenu() {
+    out.textContent = "";
+    var q = query.trim().toLowerCase(), shown = 0;
+    MENU.forEach(function (cat) {
+      if (activeCat !== "all" && activeCat !== cat.id) return;
+      var items = cat.items.filter(function (it) {
+        return !q || (it[0] + " " + (it[2] || "") + " " + cat.label).toLowerCase().indexOf(q) !== -1;
+      });
+      if (!items.length) return;
+      var sec = el("div", "cat");
+      var h = el("h3", null, cat.label);
+      if (cat.note) h.appendChild(el("small", null, cat.note));
+      sec.appendChild(h);
+      var grid = el("div", "items");
+      items.forEach(function (it) {
+        var row = el("div", "item");
+        var line = el("div", "row");
+        var nm = el("span", "name", it[0]);
+        if (it[3]) nm.appendChild(el("span", "pop", "Popular"));
+        line.appendChild(nm);
+        line.appendChild(el("span", "lead"));
+        line.appendChild(el("span", "price", money(it[1])));
+        row.appendChild(line);
+        if (it[2]) row.appendChild(el("div", "desc", it[2]));
+        grid.appendChild(row);
+        shown++;
+      });
+      sec.appendChild(grid);
+      out.appendChild(sec);
+    });
+    if (!shown) out.appendChild(el("p", "empty", "Nothing matches that search. Try a shorter word like chicken or lamb."));
+  }
+  document.getElementById("q").addEventListener("input", function (e) { query = e.target.value; renderMenu(); });
+  renderChips(); renderMenu();
+
+  /* ---------- Open now (Sugar Land time) ---------- */
+  function fmt(mins) {
+    var h = Math.floor(mins / 60), m = mins % 60, ap = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return h + ":" + (m < 10 ? "0" : "") + m + " " + ap;
+  }
+  function updateOpen() {
+    var OPEN = 12 * 60, CLOSE = 21 * 60 + 35, mins;
+    try {
+      var parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", hour: "numeric", minute: "numeric", hour12: false }).formatToParts(new Date());
+      var hh = 0, mm = 0;
+      parts.forEach(function (p) { if (p.type === "hour") hh = parseInt(p.value, 10) % 24; if (p.type === "minute") mm = parseInt(p.value, 10); });
+      mins = hh * 60 + mm;
+    } catch (e) { return; }
+    var dot = document.getElementById("open-dot"), txt = document.getElementById("open-text");
+    if (mins >= OPEN && mins < CLOSE) { dot.className = "dot on"; txt.textContent = "Open now until " + fmt(CLOSE); }
+    else { dot.className = "dot"; txt.textContent = "Closed, opens " + (mins < OPEN ? "today" : "tomorrow") + " at " + fmt(OPEN); }
+  }
+  updateOpen(); setInterval(updateOpen, 60000);
+
+  /* ---------- Reviews ---------- */
+  // Real review text that has been confirmed. New ones arrive live from the shared store below.
+  var BASE = [
+    { id: "base-1", name: "Google reviewer", rating: 5, text: "Wallah they got the best food I always go there.", sub: "Food 5 · Service 5 · Atmosphere 5", ts: 0 }
+  ];
+  var live = {};            // id -> review from the shared store
+  var seen = {};            // ids already rendered, so only truly new ones animate
+  var firstPaint = true;
+  var canManage = false, dbRef = null;
+  var area = document.getElementById("review-area");
+  var countEl = document.getElementById("review-count");
+
+  function starsEl(n) {
+    var s = el("span", "stars");
+    s.setAttribute("role", "img");
+    s.setAttribute("aria-label", n + " out of 5 stars");
+    s.appendChild(document.createTextNode("★★★★★".slice(0, n)));
+    if (n < 5) s.appendChild(el("i", null, "★★★★★".slice(0, 5 - n)));
+    return s;
+  }
+
+  function cardFor(r, dup) {
+    var c = el("article", "review");
+    if (!dup && !firstPaint && !seen[r.id]) c.className += " fresh";
+    c.appendChild(starsEl(r.rating));
+    c.appendChild(el("q", null, "“" + r.text + "”"));
+    var m = el("div", "meta");
+    m.appendChild(el("b", null, r.name));
+    if (!dup && !firstPaint && !seen[r.id]) m.appendChild(el("span", "badge-new", "NEW"));
+    if (r.sub) m.appendChild(el("span", "sub", r.sub));
+    if (r.ts) m.appendChild(el("span", null, new Date(r.ts).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })));
+    if (canManage && live[r.id] && !dup) {
+      var x = el("button", "x-btn", "Remove");
+      x.type = "button";
+      x.addEventListener("click", function () { if (dbRef) dbRef.collection("reviews").doc(r.id).delete().catch(function () {}); });
+      m.appendChild(x);
+    }
+    if (dup) c.setAttribute("aria-hidden", "true");
+    return c;
+  }
+
+  function renderReviews() {
+    var all = BASE.concat(Object.keys(live).map(function (k) { return live[k]; }))
+      .filter(function (r) { return Number(r.rating) >= 4 && r.text; })
+      .sort(function (a, b) { return (b.ts || 0) - (a.ts || 0); });
+    area.textContent = "";
+    countEl.textContent = all.length + (all.length === 1 ? " review" : " reviews") + " shown here";
+    var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Always a scrolling ticker. With few reviews the set repeats so the strip stays full.
+    var tk = el("div", "ticker"), tr = el("div", "track");
+    var reps = Math.max(1, Math.ceil(6 / Math.max(all.length, 1)));
+    for (var k = 0; k < reps; k++) all.forEach(function (r) { tr.appendChild(cardFor(r, k > 0)); });
+    if (!reduce) for (var k2 = 0; k2 < reps; k2++) all.forEach(function (r) { tr.appendChild(cardFor(r, true)); });
+    tr.style.setProperty("--dur", Math.max(36, all.length * reps * 8) + "s");
+    tk.appendChild(tr); area.appendChild(tk);
+    all.forEach(function (r) { seen[r.id] = true; });
+    firstPaint = false;
+  }
+  renderReviews();
+
+  // Shared live store: signed-in viewers get new reviews the moment they are published.
+  (async function () {
+    try {
+      if (!window.claude || !claude.use) return;
+      var db = await claude.use("db");
+      var user = await claude.use("user");
+      if (!db) return;
+      dbRef = db;
+      canManage = !!(user && user.canEdit && user.canEdit());
+      document.getElementById("add-form").hidden = !canManage;
+      db.collection("reviews").orderBy("ts", "desc").limit(60).onSnapshot(function (snap) {
+        var next = {};
+        snap.docs.forEach(function (d) {
+          var v = d.data(); if (!v) return;
+          next[d.id] = { id: d.id, name: String(v.name || "Google reviewer"), rating: Number(v.rating), text: String(v.text || ""), ts: Number(v.ts) || 0 };
+        });
+        live = next; renderReviews();
+      }, function () {});
+    } catch (e) { /* page works without the live store */ }
+  })();
+
+  document.getElementById("add-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var msg = document.getElementById("rv-msg");
+    var name = document.getElementById("rv-name").value.trim() || "Google reviewer";
+    var rating = Number(document.getElementById("rv-rating").value);
+    var text = document.getElementById("rv-text").value.trim();
+    if (!text) { msg.textContent = "Paste the review text first."; return; }
+    if (rating < 4) { msg.textContent = "Only 4 and 5 star reviews are published."; return; }
+    try {
+      await dbRef.collection("reviews").add({ name: name, rating: rating, text: text, ts: Date.now(), source: "Google" });
+      document.getElementById("rv-text").value = ""; document.getElementById("rv-name").value = "";
+      msg.textContent = "Published.";
+    } catch (err) { msg.textContent = "Could not publish. Check that you are signed in as an editor."; }
+  });
+
+  /* ---------- Copy address ---------- */
+  document.getElementById("copy-addr").addEventListener("click", function () {
+    var text = "10021 S Texas 6, Sugar Land, TX 77498", ok = document.getElementById("copy-ok");
+    function done() { ok.hidden = false; setTimeout(function () { ok.hidden = true; }, 1800); }
+    try { navigator.clipboard.writeText(text).then(done, function () { selectAddr(); }); } catch (e) { selectAddr(); }
+    function selectAddr() {
+      var r = document.createRange(); r.selectNodeContents(document.getElementById("addr"));
+      var s = getSelection(); s.removeAllRanges(); s.addRange(r);
+    }
+  });
+
+  /* ---------- Embers ---------- */
+  var cv = document.getElementById("embers"), cx = cv.getContext("2d"), parts = [], W = 0, H = 0, raf = 0;
+  var still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function size() {
+    var r = cv.getBoundingClientRect(), d = Math.min(window.devicePixelRatio || 1, 2);
+    W = r.width; H = r.height; cv.width = W * d; cv.height = H * d; cx.setTransform(d, 0, 0, d, 0, 0);
+  }
+  function seed(p, fresh) {
+    p.x = Math.random() * W; p.y = fresh ? Math.random() * H : H + 10;
+    p.r = 0.8 + Math.random() * 2.2; p.v = 0.25 + Math.random() * 0.8; p.s = Math.random() * 6.28; p.a = 0.25 + Math.random() * 0.6;
+    return p;
+  }
+  function frame() {
+    cx.clearRect(0, 0, W, H);
+    var col = getComputedStyle(document.documentElement).getPropertyValue("--ember").trim() || "#ff8a1f";
+    cx.fillStyle = col;
+    parts.forEach(function (p) {
+      if (!still) { p.y -= p.v; p.s += 0.02; p.x += Math.sin(p.s) * 0.4; if (p.y < -10) seed(p, false); }
+      cx.globalAlpha = p.a * Math.min(1, p.y / (H * 0.5) + 0.2);
+      cx.beginPath(); cx.arc(p.x, p.y, p.r, 0, 6.283); cx.fill();
+    });
+    cx.globalAlpha = 1;
+    if (!still) raf = requestAnimationFrame(frame);
+  }
+  size();
+  for (var i = 0; i < 46; i++) parts.push(seed({}, true));
+  frame();
+  window.addEventListener("resize", function () { size(); if (still) frame(); });
+  document.addEventListener("visibilitychange", function () {
+    if (still) return;
+    if (document.hidden) cancelAnimationFrame(raf); else frame();
+  });
+})();
+</script>
+
+</body></html>
