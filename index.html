@@ -1,4 +1,4 @@
-!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -210,11 +210,13 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
 .hero .wrap { position: relative; z-index: 2; }
 .hero::before {
   content: ""; position: absolute; z-index: 0; pointer-events: none;
-  width: min(1120px, 110vw); height: 460px; right: -95px; top: 0;
-  opacity: .58; background-repeat: no-repeat; background-position: center right;
+  width: min(1180px, 125vw); height: 100%; right: -110px; top: 0;
+  opacity: .52; background-repeat: no-repeat; background-position: center right;
   background-size: contain;
   background-image: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3Kh5KD2tgzKxIpsh76mzeaW2vO0/fdbfa0b4-4c62-4e9e-89db-a2e79ee17696.png");
-  mask-image: linear-gradient(90deg, transparent 0%, #000 32%, #000 100%);
+  /* Fade the photo into the page on every edge instead of showing a hard rectangle. */
+  -webkit-mask-image: radial-gradient(ellipse 76% 78% at 72% 50%, #000 24%, rgb(0 0 0 / .88) 44%, rgb(0 0 0 / .38) 65%, transparent 100%);
+  mask-image: radial-gradient(ellipse 76% 78% at 72% 50%, #000 24%, rgb(0 0 0 / .88) 44%, rgb(0 0 0 / .38) 65%, transparent 100%);
 }
 .hero h1 { position: relative; z-index: 2; text-shadow: 0 4px 30px var(--bg); }
 .food-gallery { padding-top: 18px; }
@@ -225,7 +227,7 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
 .food-shot:hover img { transform: scale(1.025); }
 .food-shot figcaption { position: absolute; left: 12px; bottom: 12px; padding: 7px 11px; border-radius: 4px; background: rgb(24 22 19 / 84%); color: var(--fg); font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
 @media (max-width: 640px) {
-  .hero::before { width: 130vw; height: 280px; right: -38vw; top: 100px; opacity: .30; background-position: center; }
+  .hero::before { width: 145vw; height: 82%; right: -48vw; top: 72px; opacity: .34; background-position: center; }
   .food-gallery-grid { grid-template-columns: 1fr; }
   .food-shot img { height: 250px; }
 }
