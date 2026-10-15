@@ -205,20 +205,29 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
   .dot.on, .live-tag .dot, .review.fresh { animation: none; }
 }
 
-/* Almankal truck-inspired hero and desktop cursor */
+/* Real truck photo in the hero, with the existing headline kept legible. */
 .hero { isolation: isolate; }
 .hero .wrap { position: relative; z-index: 2; }
 .hero::before {
   content: ""; position: absolute; z-index: 0; pointer-events: none;
-  width: min(850px, 96vw); height: 300px; right: -110px; top: 58px;
-  opacity: .20; background-repeat: no-repeat; background-position: center;
+  width: min(1120px, 110vw); height: 460px; right: -95px; top: 0;
+  opacity: .58; background-repeat: no-repeat; background-position: center right;
   background-size: contain;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 320'%3E%3Cpath d='M65 95 Q65 65 100 65 H555 Q590 65 610 95 L680 140 H780 Q820 140 835 180 L850 235 H60Z' fill='%23ff8a1f' fill-opacity='.22' stroke='%23ff8a1f' stroke-width='7'/%3E%3Cpath d='M600 105 L666 150 H738 V105Z' fill='%23f3ede3' fill-opacity='.15' stroke='%23ff8a1f' stroke-width='4'/%3E%3Cpath d='M90 105 H570 V205 H90Z' fill='%23ff8a1f' fill-opacity='.10' stroke='%23ff8a1f' stroke-width='3'/%3E%3Cpath d='M130 126 H535 M130 145 H480' stroke='%23efc25a' stroke-width='5' stroke-linecap='round' opacity='.8'/%3E%3Ctext x='345' y='190' text-anchor='middle' font-family='Arial,sans-serif' font-weight='900' font-size='47' fill='%23f3ede3' letter-spacing='3'%3EAL MANKAL%3C/text%3E%3Ccircle cx='190' cy='238' r='40' fill='%23181613' stroke='%23efc25a' stroke-width='8'/%3E%3Ccircle cx='190' cy='238' r='15' fill='%23a9a094'/%3E%3Ccircle cx='720' cy='238' r='40' fill='%23181613' stroke='%23efc25a' stroke-width='8'/%3E%3Ccircle cx='720' cy='238' r='15' fill='%23a9a094'/%3E%3Cpath d='M72 213 H840' stroke='%23ff8a1f' stroke-width='4' stroke-dasharray='14 11' opacity='.75'/%3E%3C/svg%3E");
-  mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  background-image: url("https://d2ol7oe51mr4n9.cloudfront.net/user_3Kh5KD2tgzKxIpsh76mzeaW2vO0/fdbfa0b4-4c62-4e9e-89db-a2e79ee17696.png");
+  mask-image: linear-gradient(90deg, transparent 0%, #000 32%, #000 100%);
 }
 .hero h1 { position: relative; z-index: 2; text-shadow: 0 4px 30px var(--bg); }
+.food-gallery { padding-top: 18px; }
+.food-gallery .sec-head { margin-bottom: 18px; }
+.food-gallery-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 16px; }
+.food-shot { position: relative; margin: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); min-height: 220px; }
+.food-shot img { display: block; width: 100%; height: clamp(220px, 31vw, 370px); object-fit: cover; filter: contrast(1.035) saturate(1.035) brightness(1.015); transition: transform .35s ease; }
+.food-shot:hover img { transform: scale(1.025); }
+.food-shot figcaption { position: absolute; left: 12px; bottom: 12px; padding: 7px 11px; border-radius: 4px; background: rgb(24 22 19 / 84%); color: var(--fg); font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
 @media (max-width: 640px) {
-  .hero::before { width: 115vw; height: 190px; right: -30vw; top: 110px; opacity: .12; }
+  .hero::before { width: 130vw; height: 280px; right: -38vw; top: 100px; opacity: .30; background-position: center; }
+  .food-gallery-grid { grid-template-columns: 1fr; }
+  .food-shot img { height: 250px; }
 }
 /* Custom truck cursor on laptops/desktops; touch devices keep their normal interaction. */
 @media (hover: hover) and (pointer: fine) {
@@ -258,6 +267,29 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
       </div>
     </div>
   </div>
+
+  <section class="food-gallery" aria-label="Food photos">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <span class="eyebrow">Fresh off the grill</span>
+          <h2>A closer look</h2>
+          <p>Charcoal-grilled favorites, shawarma and generous plates made for sharing.</p>
+        </div>
+        <a class="btn ghost sm" href="https://order.online/store/almankal-grill-s-texas-6-24506758" target="_blank" rel="noopener">Explore the menu</a>
+      </div>
+      <div class="food-gallery-grid">
+        <figure class="food-shot">
+          <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_3Kh5KD2tgzKxIpsh76mzeaW2vO0/80f40b47-b209-4689-81a1-183a49b5d9f8.png" alt="Mixed grilled meats, vegetables, fries and lime on a sharing platter" loading="lazy">
+          <figcaption>Made for sharing</figcaption>
+        </figure>
+        <figure class="food-shot">
+          <img src="https://d2ol7oe51mr4n9.cloudfront.net/user_3Kh5KD2tgzKxIpsh76mzeaW2vO0/49770c2d-6244-4f5f-b866-daa08ea09c22.png" alt="Chicken shawarma wraps with creamy sauce and vegetables" loading="lazy">
+          <figcaption>Shawarma favorites</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
 
   <section id="reviews">
     <div class="wrap">
