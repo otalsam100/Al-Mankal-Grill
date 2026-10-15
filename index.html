@@ -86,7 +86,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .hero-ar { font-family: var(--font-ar); font-size: clamp(22px, 4vw, 34px); color: var(--gold); margin: 0 0 6px; line-height: 1.3; }
 .hero h1 {
   font-family: var(--font-display); font-weight: 400; text-transform: uppercase;
-  font-size: clamp(60px, 15vw, 168px); line-height: .92; letter-spacing: .01em;
+  font-size: clamp(52px, 11.5vw, 144px); line-height: .92; letter-spacing: .01em;
+  max-width: 100%; overflow-wrap: anywhere;
 }
 .hero h1 span { color: var(--ember); display: block; }
 .hero p.lede { max-width: 52ch; font-size: clamp(17px, 2.2vw, 20px); color: var(--muted); margin: 22px 0 28px; }
@@ -234,9 +235,31 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
   text-shadow: 0 1px 8px rgb(0 0 0 / 60%); pointer-events: none;
 }
 @media (max-width: 640px) {
+  .hero { padding-block: 48px 34px; }
   .hero::before { width: 145vw; height: 82%; right: -48vw; top: 72px; opacity: .34; background-position: center; }
+  .hero h1 { font-size: clamp(48px, 12vw, 76px); line-height: .98; }
+  .hero p.lede { margin: 18px 0 22px; font-size: 17px; }
+  .cta-row .btn { flex: 1 1 100%; text-align: center; justify-content: center; }
   .food-gallery-grid { grid-template-columns: 1fr; }
   .food-shot img { height: 250px; }
+}
+
+/* A persistent, thumb-friendly order action on phones. */
+.mobile-order-bar { display: none; }
+@media (max-width: 700px) {
+  body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+  .mobile-order-bar {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    position: fixed; z-index: 1000; left: 14px; right: 14px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    min-height: 52px; padding: 14px 20px; border-radius: 999px;
+    background: linear-gradient(135deg, #ff9a32, var(--ember));
+    color: #1a1208; border: 1px solid rgb(255 255 255 / 24%);
+    box-shadow: 0 8px 28px rgb(0 0 0 / 34%), 0 2px 8px rgb(255 138 31 / 22%);
+    font-family: var(--font-body); font-size: 15px; font-weight: 700;
+    text-decoration: none; letter-spacing: .01em;
+  }
+  .mobile-order-bar:active { transform: translateY(1px); }
 }
 /* Custom truck cursor on laptops/desktops; touch devices keep their normal interaction. */
 @media (hover: hover) and (pointer: fine) {
@@ -262,7 +285,7 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
   <div class="hero">
     <canvas id="embers" aria-hidden="true"></canvas>
     <div class="wrap">
-      <p class="hero-ar" lang="ar" dir="rtl">المنقل</p>
+      <p class="hero-ar" lang="ar" dir="rtl" aria-label="Al-Manqal">الْمَنْقَل</p>
       <h1>Almankal<span>Grill</span></h1>
       <p class="lede">Palestinian and Middle Eastern barbecue cooked over charcoal on <strong>S Texas 6 in Sugar Land</strong>. Shawarma, skewers, mixed grill and family platters, all <strong>Zabiha halal</strong>.</p>
       <div class="cta-row">
@@ -387,6 +410,10 @@ footer { border-top: 1px solid var(--line); padding-block: 32px 40px; color: var
   <span>Almankal Grill &middot; 10021 S Texas 6, Sugar Land, TX 77498</span>
   <span>Palestinian and Middle Eastern charcoal barbecue</span>
 </footer>
+
+<a class="mobile-order-bar" href="https://order.online/store/almankal-grill-s-texas-6-24506758" target="_blank" rel="noopener" aria-label="Order Al-Mankal Grill online">
+  <span aria-hidden="true">↗</span> Order Online
+</a>
 
 <script>
 (function () {
